@@ -1,36 +1,12 @@
 package pe_temp_funcs
 
 import (
-	"fmt"
-	"io/ioutil"
 	"log"
-	"os"
 	"os/exec"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/mamunsd/PE_STACK/pe_mongo_db"
 )
-
-var homeCache string
-
-func GetFileContentAsByte(filePath string) []byte {
-	myFile, err := os.Open(filePath)
-	if err != nil {
-		fmt.Println(err)
-	}
-	myByteVal, _ := ioutil.ReadAll(myFile)
-	return myByteVal
-}
-
-func GetFileContentAsString(filePath string) string {
-	myFile, err := os.Open(filePath)
-	if err != nil {
-		fmt.Println(err)
-	}
-	myByteVal, _ := ioutil.ReadAll(myFile)
-	return string(myByteVal)
-}
 
 func PeSysCmd(myCommand string) string {
 	cmd := exec.Command("/bin/sh", "-c", myCommand)
@@ -91,49 +67,4 @@ func regPostRoutes(app *fiber.App) {
 		resString := pe_mongo_db.GenQueryMongo([]byte(payload))
 		return c.SendString(resString)
 	})
-}
-
-func regProdPostRoutes(app *fiber.App) {
-	app.Post("/api/sms/genq", func(c *fiber.Ctx) error {
-		// myReq := `{"q_collection":"short_messages","filter":{"_id": {"$gt": "akashetejototara"}, "USER_ID" : "rasel@gmail.com"},"qconfig":{"sort":{"_id":-1},"limit":75}}`
-		// mReply := peMongo.GeneralQuery_withMap([]byte(myReq))
-		payload := c.Body()
-		resString := pe_mongo_db.ShrtMsgGenQ(string(payload))
-		return c.SendString(resString)
-	})
-
-	app.Post("/api/subs/new", func(c *fiber.Ctx) error {
-		payload := c.Body()
-		collName := "subscribers"
-		pe_mongo_db.InsertOne(collName, string(payload))
-
-		return c.SendString("{}")
-	})
-}
-
-func PeFwebServerSample() {
-	homeCache = GetFileContentAsString("./static/page0.html")
-	app := fiber.New(fiber.Config{
-		Prefork:       true,
-		CaseSensitive: true,
-		StrictRouting: true,
-		ServerHeader:  "Fiber",
-		AppName:       "Test App v1.0.1"})
-	app.Static("/", "./static")
-
-	app.Use(cors.New(cors.Config{
-		AllowOrigins: "*",
-		AllowMethods: "GET,POST,PATCH",
-		// AllowMethods: "*",
-	}))
-
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendFile("./static/page0.html")
-	})
-
-	regProdPostRoutes(app)
-	// regSampleRoutesSysExe(app)
-	// regSamplePageRoutes(app)
-
-	app.Listen("0.0.0.0:9928")
 }

@@ -1,7 +1,9 @@
 package main
 
-import "github.com/mamunsd/PE_STACK/pe_temp_funcs"
+import (
+	"github.com/mamunsd/PE_STACK/pe_ws_stack_fiber"
+)
 
 func main() {
-	pe_temp_funcs.PeFwebServerSample()
+	pe_ws_stack_fiber.PeFwebServerSample()
 }
