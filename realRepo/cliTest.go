@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"pemgo/peMongo"
 	"time"
 
+	"github.com/mamunsd/PE_STACK/pe_mongo_db"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -38,7 +38,7 @@ func RecursiveJsonToBsonTest() {
 	var myTurn uint32
 	myTurn = 10000000
 	for mindex = 0; mindex < myTurn; mindex++ {
-		peMongo.PeJsonToBsonRecur(myJson, &myBson)
+		pe_mongo_db.PeJsonToBsonRecur(myJson, &myBson)
 	}
 
 	myEndTime := time.Now().Unix()
@@ -71,7 +71,7 @@ func TestRecJsonToBsonSingle() {
 		}
 	}`
 	myBson := bson.M{}
-	peMongo.PeJsonToBsonRecur(myJson, &myBson)
+	pe_mongo_db.PeJsonToBsonRecur(myJson, &myBson)
 	fmt.Println(myBson)
 }
 
@@ -88,12 +88,12 @@ func TestUpdateOne() {
 		]
 		}`
 	recID := "6077c87cfbcb852f9f69aca2"
-	peMongo.UpdateOne("short_messages", recID, myJson)
+	pe_mongo_db.UpdateOne("short_messages", recID, myJson)
 }
 
 func TestInsertOne() {
 	myJson := `{"CONT_NAME" : "Sooryavanshi", "CONT_TYPE" : "MOVIE", "INDUSTRY" : "Bollywood"}`
-	peMongo.InsertOne("contents", myJson)
+	pe_mongo_db.InsertOne("contents", myJson)
 }
 
 func TestGenQuery() {
@@ -102,6 +102,6 @@ func TestGenQuery() {
 	QueryJson := `{"q_collection":"short_messages","filter":{"_id": {"$gt": "6077cb85fbcb852f9f69ada5"}, "CHANNEL" : "PYTHON", "$and" : [{"R_RATING" : {"$gt" : 1200}}, {"R_RATING" : {"$lt" : 3000}}]},"qconfig":{"sort":{"_id":-1},"limit":1}}`
 	// QueryJson := `{"_id": {"$gt": "6077cb85fbcb852f9f69ada5"}, "$and" : [{"R_RATING" : {"$gt" : 1200}}, {"R_RATING" : {"$lt" : 3000}}], "USER_ID" : "rasel@gmail.com", "CHANNEL" : "PYTHON"}`
 
-	myRes := peMongo.ShrtMsgGenQ(QueryJson)
+	myRes := pe_mongo_db.ShrtMsgGenQ(QueryJson)
 	fmt.Println(myRes)
 }

@@ -1,4 +1,4 @@
-package peFileOps
+package pe_file_ops
 
 import (
 	"fmt"

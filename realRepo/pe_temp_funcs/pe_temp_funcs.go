@@ -1,4 +1,4 @@
-package peTempFuncs
+package pe_temp_funcs
 
 import (
 	"fmt"
@@ -6,10 +6,10 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"pemgo/peMongo"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/mamunsd/PE_STACK/pe_mongo_db"
 )
 
 var homeCache string
@@ -88,7 +88,7 @@ func regPostRoutes(app *fiber.App) {
 		// myReq := `{"q_collection":"short_messages","filter":{"_id": {"$gt": "akashetejototara"}, "USER_ID" : "rasel@gmail.com"},"qconfig":{"sort":{"_id":-1},"limit":75}}`
 		// mReply := peMongo.GeneralQuery_withMap([]byte(myReq))
 		payload := c.Body()
-		resString := peMongo.GenQueryMongo([]byte(payload))
+		resString := pe_mongo_db.GenQueryMongo([]byte(payload))
 		return c.SendString(resString)
 	})
 }
@@ -98,14 +98,14 @@ func regProdPostRoutes(app *fiber.App) {
 		// myReq := `{"q_collection":"short_messages","filter":{"_id": {"$gt": "akashetejototara"}, "USER_ID" : "rasel@gmail.com"},"qconfig":{"sort":{"_id":-1},"limit":75}}`
 		// mReply := peMongo.GeneralQuery_withMap([]byte(myReq))
 		payload := c.Body()
-		resString := peMongo.ShrtMsgGenQ(string(payload))
+		resString := pe_mongo_db.ShrtMsgGenQ(string(payload))
 		return c.SendString(resString)
 	})
 
 	app.Post("/api/subs/new", func(c *fiber.Ctx) error {
 		payload := c.Body()
 		collName := "subscribers"
-		peMongo.InsertOne(collName, string(payload))
+		pe_mongo_db.InsertOne(collName, string(payload))
 
 		return c.SendString("{}")
 	})

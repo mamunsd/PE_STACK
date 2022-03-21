@@ -1,7 +1,7 @@
 package main
 
-import "pemgo/peTempFuncs"
+import "github.com/mamunsd/PE_STACK/pe_temp_funcs"
 
 func main() {
-	peTempFuncs.PeFwebServerSample()
+	pe_temp_funcs.PeFwebServerSample()
 }

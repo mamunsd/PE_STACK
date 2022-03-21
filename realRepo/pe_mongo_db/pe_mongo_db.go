@@ -9,7 +9,7 @@ bson.D হইলো এরের মতো
 bson.E হইলো এক টা জেসোন আইটেম
 */
 
-package peMongo
+package pe_mongo_db
 
 import (
 	"context"
@@ -19,6 +19,7 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/mamunsd/PE_STACK/pe_data_models"
 	"github.com/tidwall/gjson"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -33,17 +34,6 @@ var myDbClient *mongo.Client
 var ctx context.Context
 var connerr error
 var DbName string = "smanager"
-
-type KthkMsgs struct {
-	Mid      primitive.ObjectID `bson:"_id" json:"_id"`
-	UserId   string             `bson:"USER_ID" json:"USER_ID"`
-	RoomName string             `bson:"ROOM_NAME" json:"ROOM_NAME"`
-	Channel  string             `bson:"CHANNEL" json:"CHANNEL"`
-	Content  string             `bson:"CONTENT" json:"CONTENT"`
-	Ts       uint64             `bson:"TS" json:"TS"`
-	Iid      uint64             `bson:"IID" json:"IID"`
-	Rrating  uint32             `bson:"R_RATING" json:"R_RATING"`
-}
 
 /*
 Go তে init() ফাংশনটা প্যাকেজ লেভেলে একবার লেখা যায় .. এবং যতবার ই প্যাকেজ টা ইমপোর্ট করা হউক
@@ -64,7 +54,7 @@ func init_1() {
 
 func init() {
 	ctx = context.TODO()
-	myDbClient, connerr = mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://10.120.10.33:27017,10.120.10.34:27017,10.120.10.35:27017/?replicaSet=ultraMongoRepl_00&connectTimeoutMS=300000"))
+	myDbClient, connerr = mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://172.16.25.101:27017,localhost:28018/?replicaSet=ultraMongoRepl_00&connectTimeoutMS=300000"))
 	if connerr != nil {
 		panic(connerr)
 	}
@@ -290,7 +280,7 @@ func GenQueryMongo(myQuery []byte) string {
 	// Go তে এই ভাবে যদি স্লাইস / এরে ইনিশিয়ালাইজ করা হয় তাইলে জেসন মার্শালিং এর সময় নাল রিটার্ন করে
 	// var results []KthkMsgs
 	// এই জন্য মেক দিয়ে ইনিশিয়ালাইজ করা উচিৎ
-	results := make([]KthkMsgs, 0)
+	results := make([]pe_data_models.KthkMsgs, 0)
 
 	if err = cursor.All(ctx, &results); err != nil {
 		panic(err)
@@ -360,7 +350,7 @@ func ShrtMsgGenQ(queryS string) string {
 	// Go তে এই ভাবে যদি স্লাইস / এরে ইনিশিয়ালাইজ করা হয় তাইলে জেসন মার্শালিং এর সময় নাল রিটার্ন করে
 	// var results []KthkMsgs
 	// এই জন্য মেক দিয়ে ইনিশিয়ালাইজ করা উচিৎ
-	results := make([]KthkMsgs, 0)
+	results := make([]pe_data_models.KthkMsgs, 0)
 
 	if err = myCursor.All(ctx, &results); err != nil {
 		panic(err)

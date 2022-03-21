@@ -1,4 +1,4 @@
-package peSysExe
+package pe_sys_executions
 
 import (
 	"log"
